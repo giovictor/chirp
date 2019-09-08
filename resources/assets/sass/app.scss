@@ -7,3 +7,22 @@
 
 // Bootstrap
 @import "~bootstrap-sass/assets/stylesheets/bootstrap";
+
+
+/* login and Register */
+.intro {
+    text-align:justify;
+    padding-bottom:30px;
+}
+
+.navbar-brand {
+    img {
+        display:inline-block;
+        height:30px;
+    }
+}
+
+.page_logo {
+    display:block;
+    margin:0 auto;
+}
