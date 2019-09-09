@@ -12,21 +12,19 @@
                 </div>
             </form>
         </div>
-
         <div class="postsList">
             <p class="latestChirpsText">Latest chirps from random cool people</p>
             <div class="panel panel-default" v-for="post in posts" :key="post.id">
-                <div class="panel-body">
-                    <p class="author">{{post.user.name}} wrote {{post.created_at}}</p>
-                    <p class="post">{{post.post}}</p>
-                </div>
+                <post :post="post" :user="user" @deletePost="deletePost"></post>
             </div>
         </div>
+        
     </div>
 </template>
 
 <script>
     export default {
+        props:['user'],
         data() {
             return {
                 posts:[],
@@ -41,18 +39,37 @@
             decreaseCharacterLimit() {
                 this.limit = 200 - this.post.length
             },
-            sharePost() {
-                axios.post('api/posts', {post:this.post})
-                .then(response => console.log(response.data))
-                .catch(error => console.log(error))
-            },
             listPosts() {
                 axios.get('api/posts')
                 .then(response => this.posts = response.data)
                 .catch(error => console.log(error))
+            },
+            sharePost() {
+                axios.post('api/posts', {post:this.post, user_id:this.user.id})
+                .then(response => this.listPosts())
+                .catch(error => console.log(error))
+                this.post = ''
+                this.limit = 200
+            },
+            deletePost(id) {
+                swal({
+                    text: "Are you sure you want to delete this post?",
+                    icon: "warning",
+                    button:"Yes, delete it.",
+                    dangerMode: true,
+                })
+                .then(response => {
+                    if(response) {
+                        axios.delete(`api/posts/${id}`)
+                        .then(response => {
+                            this.listPosts()
+                        })
+                        .catch(error => console.log(error))  
+                        swal("Deleted!", "Your post was deleted.", "success");
+                    }
+                });         
             }
         }
-
     }
 </script>
 
@@ -86,10 +103,22 @@
         .postsList {
             .latestChirpsText {
                 font-size:18px;
+                font-weight:700;
+                color:#000000;
             }
 
             .panel {
                 margin-bottom:0;
+
+                .author {
+                    font-size:15px;
+                    font-weight:700;
+                    color:#000000;
+                }
+
+                .post {
+                    font-size:14px;
+                }
             }
         }
     }

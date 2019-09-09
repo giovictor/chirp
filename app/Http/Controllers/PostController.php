@@ -7,54 +7,29 @@ use App\Post;
 
 class PostController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
         return Post::with('user')->orderBy('created_at', 'desc')->get();
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         $request->validate([
-            'post' => 'required|string|max:200'
+            'post' => 'required|string|max:200',
+            'user_id' => 'required|integer|exists:users,id'
         ]);
 
-        $post = Post::create(['post' => $request->post]);
-        $post->user_id = auth()->user()->id;
-        $post->save();
-
+        $post = Post::create(['post' => $request->post, 'user_id' =>  $request->user_id]);
         return $post;
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function show($id)
     {
-        //
+        
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
+    public function destroy(Post $post)
     {
-        //
+        $post->delete();
     }
 }

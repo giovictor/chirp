@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use JWTAuth;
+use Auth;
 
 class AuthController extends Controller
 {
@@ -17,14 +18,19 @@ class AuthController extends Controller
 
         $credentials = $request->only(['email','password']);
 
-        try {
-            if(!$token = JWTAuth::attempt($credentials)) {
-                return response()->json(['message' => 'Invalid email or password.'], 401);
-            }
-        } catch(JWTException $e) {
-            return response()->json(['message' => $e->getMessage()], 500);
-        }
+        if(Auth::attempt($credentials) && $token = JWTAuth::attempt($credentials)) {
+            return redirect()->route('home');
+            // return response()->json(['token' => $token], 200);
+        } 
 
-        return response()->json(['token' => $token], 200);
+        // try {
+        //     if(!$token = JWTAuth::attempt($credentials)) {
+        //         return response()->json(['message' => 'Invalid email or password.'], 401);
+        //     }
+        // } catch(JWTException $e) {
+        //     return response()->json(['message' => $e->getMessage()], 500);
+        // }
+
+        // return response()->json(['token' => $token], 200);
     }
 }

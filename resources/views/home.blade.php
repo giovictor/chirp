@@ -2,6 +2,6 @@
 
 @section('content')
 <div class="container">
-    <posts></posts>
+    <posts :user="{{Auth::user()}}"></posts>
 </div>
 @endsection
