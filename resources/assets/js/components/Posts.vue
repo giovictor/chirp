@@ -15,7 +15,7 @@
 
         <div class="postsList">
             <p class="latestChirpsText">Latest chirps from random cool people</p>
-            <div class="panel panel-default" v-for="post in posts">
+            <div class="panel panel-default" v-for="post in posts" :key="post.id">
                 <div class="panel-body">
                     <p class="author">{{post.user.name}} wrote {{post.created_at}}</p>
                     <p class="post">{{post.post}}</p>
@@ -90,21 +90,6 @@
 
             .panel {
                 margin-bottom:0;
-                
-                // .panel-body {
-                //     display:flex;
-                //     flex-flow:row;
-
-                //     .profile_image {
-                //         width:60px;
-                //         height:60px;
-                //         border-radius:50%;
-                //     }
-
-                //     p {
-                //         margin-left:10px;
-                //     }
-                // }
             }
         }
     }

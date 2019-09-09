@@ -45310,17 +45310,21 @@ var render = function() {
         ]),
         _vm._v(" "),
         _vm._l(_vm.posts, function(post) {
-          return _c("div", { staticClass: "panel panel-default" }, [
-            _c("div", { staticClass: "panel-body" }, [
-              _c("p", { staticClass: "author" }, [
-                _vm._v(
-                  _vm._s(post.user.name) + " wrote " + _vm._s(post.created_at)
-                )
-              ]),
-              _vm._v(" "),
-              _c("p", { staticClass: "post" }, [_vm._v(_vm._s(post.post))])
-            ])
-          ])
+          return _c(
+            "div",
+            { key: post.id, staticClass: "panel panel-default" },
+            [
+              _c("div", { staticClass: "panel-body" }, [
+                _c("p", { staticClass: "author" }, [
+                  _vm._v(
+                    _vm._s(post.user.name) + " wrote " + _vm._s(post.created_at)
+                  )
+                ]),
+                _vm._v(" "),
+                _c("p", { staticClass: "post" }, [_vm._v(_vm._s(post.post))])
+              ])
+            ]
+          )
         })
       ],
       2

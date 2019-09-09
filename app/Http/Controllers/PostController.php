@@ -16,6 +16,7 @@ class PostController extends Controller
     {
         return Post::with('user')->orderBy('created_at', 'desc')->get();
     }
+
     /**
      * Store a newly created resource in storage.
      *
