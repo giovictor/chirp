@@ -1443,7 +1443,7 @@ try {
 window.axios = __webpack_require__(19);
 
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
-window.axios.defaults.baseURL = 'http://localhost/chirp/public/';
+window.axios.defaults.baseURL = document.head.querySelector('meta[name="app-url"]').content;
 
 /**
  * Next we will register the CSRF Token as a common header with Axios so that
@@ -45089,7 +45089,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         return {
             posts: [],
             post: '',
-            limit: 200
+            limit: 200,
+            validationMessage: '',
+            hasError: false
         };
     },
     mounted: function mounted() {
@@ -45099,6 +45101,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     methods: {
         decreaseCharacterLimit: function decreaseCharacterLimit() {
             this.limit = 200 - this.post.length;
+            if (this.limit < 0) {
+                this.validationMessage = 'Reached maximum character limit for posts.';
+                this.hasError = true;
+            } else {
+                this.validationMessage = '';
+                this.hasError = false;
+            }
         },
         listPosts: function listPosts() {
             var _this = this;
@@ -45112,13 +45121,18 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         sharePost: function sharePost() {
             var _this2 = this;
 
-            axios.post('api/posts', { post: this.post, user_id: this.user.id }).then(function (response) {
-                return _this2.listPosts();
-            }).catch(function (error) {
-                return console.log(error);
-            });
-            this.post = '';
-            this.limit = 200;
+            if (this.post == '') {
+                this.validationMessage = 'No blank post shall be posted.';
+                this.hasError = true;
+            } else {
+                axios.post('api/posts', { post: this.post, user_id: this.user.id }).then(function (response) {
+                    return _this2.listPosts();
+                }).catch(function (error) {
+                    return console.log(error);
+                });
+                this.post = '';
+                this.limit = 200;
+            }
         },
         deletePost: function deletePost(id) {
             var _this3 = this;
@@ -45189,12 +45203,16 @@ var render = function() {
               }
             }),
             _vm._v(" "),
+            _c("p", { staticClass: "emptyMessage text-danger" }, [
+              _vm._v(_vm._s(_vm.validationMessage))
+            ]),
+            _vm._v(" "),
             _c("div", { staticClass: "sharePostBottomSection" }, [
               _c(
                 "button",
                 {
                   staticClass: "btn btn-primary btn-sm chirpBtn",
-                  attrs: { type: "submit" }
+                  attrs: { type: "submit", disabled: _vm.hasError }
                 },
                 [_vm._v("Chirp")]
               ),

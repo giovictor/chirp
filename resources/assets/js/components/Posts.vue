@@ -4,9 +4,10 @@
             <form class="form" @submit.prevent="sharePost">
                 <div class="form-group">
                     <label>Hey wanna share something cool?</label>
-                    <textarea class="postTextArea form-control" v-model="post" @keyup="decreaseCharacterLimit"></textarea>
+                    <textarea class="postTextArea form-control" v-model="post" @keyup="decreaseCharacterLimit" ></textarea>
+                    <p class="emptyMessage text-danger">{{validationMessage}}</p>
                     <div class="sharePostBottomSection">
-                        <button type="submit" class="btn btn-primary btn-sm chirpBtn">Chirp</button>
+                        <button type="submit" class="btn btn-primary btn-sm chirpBtn" :disabled="hasError">Chirp</button>
                         <p class="postCharacterLimit">{{limit}}</p>
                     </div>
                 </div>
@@ -18,7 +19,6 @@
                 <post :post="post" :user="user" @deletePost="deletePost"></post>
             </div>
         </div>
-        
     </div>
 </template>
 
@@ -29,7 +29,9 @@
             return {
                 posts:[],
                 post:'',
-                limit:200
+                limit:200,
+                validationMessage:'',
+                hasError:false
             }
         },
         mounted() {
@@ -38,6 +40,13 @@
         methods:{
             decreaseCharacterLimit() {
                 this.limit = 200 - this.post.length
+                if(this.limit < 0) {
+                    this.validationMessage = 'Reached maximum character limit for posts.'
+                    this.hasError = true
+                } else {
+                    this.validationMessage = ''
+                    this.hasError = false
+                }
             },
             listPosts() {
                 axios.get('api/posts')
@@ -45,11 +54,17 @@
                 .catch(error => console.log(error))
             },
             sharePost() {
-                axios.post('api/posts', {post:this.post, user_id:this.user.id})
-                .then(response => this.listPosts())
-                .catch(error => console.log(error))
-                this.post = ''
-                this.limit = 200
+                if(this.post=='') {
+                    this.validationMessage = 'No blank post shall be posted.'
+                    this.hasError = true
+                } else {
+                    axios.post('api/posts', {post:this.post, user_id:this.user.id})
+                    .then(response => this.listPosts())
+                    .catch(error => console.log(error))
+                    this.post = ''
+                    this.limit = 200
+                }
+                
             },
             deletePost(id) {
                 swal({
