@@ -5,7 +5,10 @@ export default {
             post:'',
             limit:200,
             validationMessage:'',
-            hasError:false
+            hasError:false,
+            isLoading:true,
+            loaderColor:'#3097D1',
+            loaderSize:'200px',
         }
     },
     methods:{

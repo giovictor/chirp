@@ -13,9 +13,17 @@
                 </div>
             </form>
         </div>
-        <div class="postsList">
-            <p class="latestChirpsText" v-if="user==null">Latest chirps from random cool people</p>
-            <p class="username" v-else>{{posts.length==0 ? 'You have no chirps yet. Try chirping now!' : `${user.name}'s posts`}}</p>
+
+        <div class="loader" v-if="isLoading">
+            <ring-loader :color="loaderColor" :size="loaderSize"></ring-loader>
+            <h4 class="loadingMessage">Loading chirps...</h4>
+        </div>
+
+        <div class="postsList" v-else>
+            <div class="postHeading">
+                <p class="latestChirpsText" v-if="user==null">Latest chirps from random cool people</p>
+                <p class="username" v-else>{{displayTextOnProfilePage}}</p>
+            </div>
             <div class="panel panel-default" v-for="post in posts" :key="post.id">
                 <post :post="post" :auth-user="authUser" @deletePost="deletePost"></post>
             </div>
@@ -29,6 +37,7 @@
         props:['authUser','user'],
         mixins:[postMixin],
         mounted() {
+            this.isLoading = false
             this.showPosts()
         },
         computed:{
@@ -37,6 +46,15 @@
                     return true
                 } else {
                     return false
+                }
+            },
+            displayTextOnProfilePage() {
+                if(this.posts.length==0 && this.authUser.id===this.user.id) {
+                    return 'You have no chirps yet. Try chirping now!'
+                } else if (this.posts.length==0 && this.authUser.id!=this.user.id) {
+                    return `${this.user.name} have no posts yet.`
+                } else {
+                    return 'Chirps'
                 }
             }
         }
@@ -72,13 +90,18 @@
         }
     }
 
-    .postsList {
-        .latestChirpsText, .username {
-            font-size:18px;
-            font-weight:700;
-            color:#000000;
-        }
+    .loadingMessage {
+        text-align:center;
+        margin-top:20px;
+    }
 
+    .latestChirpsText, .username {
+        font-size:18px;
+        font-weight:700;
+        color:#000000;
+    }
+
+    .postsList {
         .panel {
             margin-bottom:0;
             width:1140px;

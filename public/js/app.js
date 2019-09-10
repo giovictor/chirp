@@ -1478,6 +1478,7 @@ window.Vue = __webpack_require__(39);
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
+Vue.component('ring-loader', __webpack_require__(82));
 Vue.component('postfeed', __webpack_require__(43));
 Vue.component('post', __webpack_require__(49));
 
@@ -1509,9 +1510,8 @@ try {
  * to our Laravel back-end. This library automatically handles sending the
  * CSRF token as a header based on the value of the "XSRF" token cookie.
  */
-
+window.baseURL = document.head.querySelector('meta[name="app-url"]').content;
 window.axios = __webpack_require__(20);
-
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 window.axios.defaults.baseURL = document.head.querySelector('meta[name="app-url"]').content;
 
@@ -45018,7 +45018,7 @@ exports = module.exports = __webpack_require__(4)(false);
 
 
 // module
-exports.push([module.i, "\n.posts[data-v-8a5e86d6] {\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-orient: vertical;\n  -webkit-box-direction: normal;\n      -ms-flex-flow: column wrap;\n          flex-flow: column wrap;\n  -webkit-box-pack: center;\n      -ms-flex-pack: center;\n          justify-content: center;\n  -webkit-box-align: center;\n      -ms-flex-align: center;\n          align-items: center;\n  margin-top: 30px;\n}\n.sharePost label[data-v-8a5e86d6] {\n  font-size: 13px;\n}\n.sharePost .postTextArea[data-v-8a5e86d6] {\n  height: 90px;\n  width: 669px;\n}\n.sharePost .sharePostBottomSection[data-v-8a5e86d6] {\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-pack: justify;\n      -ms-flex-pack: justify;\n          justify-content: space-between;\n}\n.sharePost .sharePostBottomSection .chirpBtn[data-v-8a5e86d6] {\n    margin-top: 10px;\n}\n.postsList .latestChirpsText[data-v-8a5e86d6], .postsList .username[data-v-8a5e86d6] {\n  font-size: 18px;\n  font-weight: 700;\n  color: #000000;\n}\n.postsList .panel[data-v-8a5e86d6] {\n  margin-bottom: 0;\n  width: 1140px;\n  max-width: 1140px;\n}\n@media screen and (max-width: 1200px) {\n.postsList .panel[data-v-8a5e86d6] {\n    width: 100%;\n    max-width: 100%;\n}\n}\n@media screen and (max-width: 767px) {\n.sharePost .postTextArea[data-v-8a5e86d6] {\n    width: calc(100vw - 10vw);\n}\n}\n", ""]);
+exports.push([module.i, "\n.posts[data-v-8a5e86d6] {\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-orient: vertical;\n  -webkit-box-direction: normal;\n      -ms-flex-flow: column wrap;\n          flex-flow: column wrap;\n  -webkit-box-pack: center;\n      -ms-flex-pack: center;\n          justify-content: center;\n  -webkit-box-align: center;\n      -ms-flex-align: center;\n          align-items: center;\n  margin-top: 30px;\n}\n.sharePost label[data-v-8a5e86d6] {\n  font-size: 13px;\n}\n.sharePost .postTextArea[data-v-8a5e86d6] {\n  height: 90px;\n  width: 669px;\n}\n.sharePost .sharePostBottomSection[data-v-8a5e86d6] {\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-pack: justify;\n      -ms-flex-pack: justify;\n          justify-content: space-between;\n}\n.sharePost .sharePostBottomSection .chirpBtn[data-v-8a5e86d6] {\n    margin-top: 10px;\n}\n.loadingMessage[data-v-8a5e86d6] {\n  text-align: center;\n  margin-top: 20px;\n}\n.latestChirpsText[data-v-8a5e86d6], .username[data-v-8a5e86d6] {\n  font-size: 18px;\n  font-weight: 700;\n  color: #000000;\n}\n.postsList .panel[data-v-8a5e86d6] {\n  margin-bottom: 0;\n  width: 1140px;\n  max-width: 1140px;\n}\n@media screen and (max-width: 1200px) {\n.postsList .panel[data-v-8a5e86d6] {\n    width: 100%;\n    max-width: 100%;\n}\n}\n@media screen and (max-width: 767px) {\n.sharePost .postTextArea[data-v-8a5e86d6] {\n    width: calc(100vw - 10vw);\n}\n}\n", ""]);
 
 // exports
 
@@ -45088,12 +45088,21 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: ['authUser', 'user'],
     mixins: [__WEBPACK_IMPORTED_MODULE_0__mixins_postMixin__["a" /* default */]],
     mounted: function mounted() {
+        this.isLoading = false;
         this.showPosts();
     },
 
@@ -45103,6 +45112,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 return true;
             } else {
                 return false;
+            }
+        },
+        displayTextOnProfilePage: function displayTextOnProfilePage() {
+            if (this.posts.length == 0 && this.authUser.id === this.user.id) {
+                return 'You have no chirps yet. Try chirping now!';
+            } else if (this.posts.length == 0 && this.authUser.id != this.user.id) {
+                return this.user.name + ' have no posts yet.';
+            } else {
+                return 'Chirps';
             }
         }
     }
@@ -45192,40 +45210,51 @@ var render = function() {
       ]
     ),
     _vm._v(" "),
-    _c(
-      "div",
-      { staticClass: "postsList" },
-      [
-        _vm.user == null
-          ? _c("p", { staticClass: "latestChirpsText" }, [
-              _vm._v("Latest chirps from random cool people")
+    _vm.isLoading
+      ? _c(
+          "div",
+          { staticClass: "loader" },
+          [
+            _c("ring-loader", {
+              attrs: { color: _vm.loaderColor, size: _vm.loaderSize }
+            }),
+            _vm._v(" "),
+            _c("h4", { staticClass: "loadingMessage" }, [
+              _vm._v("Loading chirps...")
             ])
-          : _c("p", { staticClass: "username" }, [
-              _vm._v(
-                _vm._s(
-                  _vm.posts.length == 0
-                    ? "You have no chirps yet. Try chirping now!"
-                    : _vm.user.name + "'s posts"
-                )
-              )
+          ],
+          1
+        )
+      : _c(
+          "div",
+          { staticClass: "postsList" },
+          [
+            _c("div", { staticClass: "postHeading" }, [
+              _vm.user == null
+                ? _c("p", { staticClass: "latestChirpsText" }, [
+                    _vm._v("Latest chirps from random cool people")
+                  ])
+                : _c("p", { staticClass: "username" }, [
+                    _vm._v(_vm._s(_vm.displayTextOnProfilePage))
+                  ])
             ]),
-        _vm._v(" "),
-        _vm._l(_vm.posts, function(post) {
-          return _c(
-            "div",
-            { key: post.id, staticClass: "panel panel-default" },
-            [
-              _c("post", {
-                attrs: { post: post, "auth-user": _vm.authUser },
-                on: { deletePost: _vm.deletePost }
-              })
-            ],
-            1
-          )
-        })
-      ],
-      2
-    )
+            _vm._v(" "),
+            _vm._l(_vm.posts, function(post) {
+              return _c(
+                "div",
+                { key: post.id, staticClass: "panel panel-default" },
+                [
+                  _c("post", {
+                    attrs: { post: post, "auth-user": _vm.authUser },
+                    on: { deletePost: _vm.deletePost }
+                  })
+                ],
+                1
+              )
+            })
+          ],
+          2
+        )
   ])
 }
 var staticRenderFns = []
@@ -45345,7 +45374,25 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: ['post', 'authUser']
+    props: ['post', 'authUser'],
+    data: function data() {
+        return {
+            baseURL: window.baseURL
+        };
+    },
+
+    computed: {
+        author: function author() {
+            if (this.authUser.name === this.post.user.name) {
+                return 'You';
+            } else {
+                return this.post.user.name;
+            }
+        },
+        userProfileLink: function userProfileLink() {
+            return this.baseURL + '/user/' + this.post.user_id;
+        }
+    }
 });
 
 /***/ }),
@@ -45374,8 +45421,8 @@ var render = function() {
       : _vm._e(),
     _vm._v(" "),
     _c("p", { staticClass: "author" }, [
-      _c("a", { attrs: { href: "user/" + _vm.post.user_id } }, [
-        _vm._v(_vm._s(_vm.post.user.name))
+      _c("a", { attrs: { href: _vm.userProfileLink } }, [
+        _vm._v(_vm._s(_vm.author))
       ]),
       _c("span", { staticClass: "date" }, [
         _vm._v(" wrote on " + _vm._s(_vm.post.created_at))
@@ -45434,7 +45481,10 @@ if (false) {
             post: '',
             limit: 200,
             validationMessage: '',
-            hasError: false
+            hasError: false,
+            isLoading: true,
+            loaderColor: '#3097D1',
+            loaderSize: '200px'
         };
     },
 
@@ -45512,6 +45562,208 @@ if (false) {
         }
     }
 });
+
+/***/ }),
+/* 77 */,
+/* 78 */,
+/* 79 */,
+/* 80 */,
+/* 81 */,
+/* 82 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(83)
+}
+var normalizeComponent = __webpack_require__(6)
+/* script */
+var __vue_script__ = __webpack_require__(85)
+/* template */
+var __vue_template__ = __webpack_require__(86)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "node_modules/vue-spinner/src/RingLoader.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-df077b9c", Component.options)
+  } else {
+    hotAPI.reload("data-v-df077b9c", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 83 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(84);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(5)("f30374be", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../css-loader/index.js!../../vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-df077b9c\",\"scoped\":false,\"hasInlineConfig\":true}!../../vue-loader/lib/selector.js?type=styles&index=0!./RingLoader.vue", function() {
+     var newContent = require("!!../../css-loader/index.js!../../vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-df077b9c\",\"scoped\":false,\"hasInlineConfig\":true}!../../vue-loader/lib/selector.js?type=styles&index=0!./RingLoader.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 84 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(4)(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n.v-spinner .v-ring\n{\n}\n.v-spinner .v-ring1\n{\n}\n.v-spinner .v-ring2\n{\n\n    -webkit-animation: v-ringRightRotate 2s 0s infinite linear;\n            animation: v-ringRightRotate 2s 0s infinite linear;\n    -webkit-animation-fill-mode: forwards;\n            animation-fill-mode: forwards;\n    -webkit-perspective: 800px;\n            perspective: 800px;  \n    position: absolute;          \n    top: 0;\n    left: 0;\n}\n.v-spinner .v-ring3\n{\n\n    -webkit-animation: v-ringLeftRotate 2s 0s infinite linear;\n            animation: v-ringLeftRotate 2s 0s infinite linear;\n    -webkit-animation-fill-mode: forwards;\n            animation-fill-mode: forwards;\n    -webkit-perspective: 800px;\n            perspective: 800px;            \n    position: absolute;\n    top: 0;\n    left: 0;\n}\n@-webkit-keyframes v-ringRightRotate\n{\n0%\n    {\n        -webkit-transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg);\n                transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg);\n}\n100%\n    { \n        -webkit-transform: rotateX(180deg) rotateY(360deg) rotateZ(360deg);\n                transform: rotateX(180deg) rotateY(360deg) rotateZ(360deg);\n}\n}\n@keyframes v-ringRightRotate\n{\n0%\n    {\n        -webkit-transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg);\n                transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg);\n}\n100%\n    { \n        -webkit-transform: rotateX(180deg) rotateY(360deg) rotateZ(360deg);\n                transform: rotateX(180deg) rotateY(360deg) rotateZ(360deg);\n}\n}\n@-webkit-keyframes v-ringLeftRotate\n{\n0%\n    {\n        -webkit-transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg);\n                transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg);\n}\n100%\n    { \n        -webkit-transform: rotateX(360deg) rotateY(180deg) rotateZ(360deg);\n                transform: rotateX(360deg) rotateY(180deg) rotateZ(360deg);\n}\n}\n@keyframes v-ringLeftRotate\n{\n0%\n    {\n        -webkit-transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg);\n                transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg);\n}\n100%\n    { \n        -webkit-transform: rotateX(360deg) rotateY(180deg) rotateZ(360deg);\n                transform: rotateX(360deg) rotateY(180deg) rotateZ(360deg);\n}\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 85 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+
+  name: 'RingLoader',
+
+  props: {
+    loading: {
+      type: Boolean,
+      default: true
+    },
+    color: {
+      type: String,
+      default: '#5dc596'
+    },
+    size: {
+      type: String,
+      default: '60px'
+    },
+    margin: {
+      type: String,
+      default: '2px'
+    },
+    radius: {
+      type: String,
+      default: '100%'
+    }
+  },
+  computed: {
+    spinnerStyle: function spinnerStyle() {
+      return {
+        height: this.size,
+        width: this.size,
+        border: parseFloat(this.size) / 10 + 'px solid' + this.color,
+        opacity: 0.4,
+        borderRadius: this.radius
+      };
+    },
+    spinnerBasicStyle: function spinnerBasicStyle() {
+      return {
+        height: this.size,
+        width: this.size,
+        position: 'relative'
+      };
+    }
+  }
+
+});
+
+/***/ }),
+/* 86 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    {
+      directives: [
+        {
+          name: "show",
+          rawName: "v-show",
+          value: _vm.loading,
+          expression: "loading"
+        }
+      ],
+      staticClass: "v-spinner"
+    },
+    [
+      _c(
+        "div",
+        { staticClass: "v-ring v-ring1", style: _vm.spinnerBasicStyle },
+        [
+          _c("div", { staticClass: "v-ring v-ring2", style: _vm.spinnerStyle }),
+          _c("div", { staticClass: "v-ring v-ring3", style: _vm.spinnerStyle })
+        ]
+      )
+    ]
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-df077b9c", module.exports)
+  }
+}
 
 /***/ })
 /******/ ]);

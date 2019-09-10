@@ -7,7 +7,7 @@ use App\Post;
 
 class PostController extends Controller
 {
-    public function index($id = null)
+    public function index()
     {       
         return Post::with('user')->orderBy('created_at', 'desc')->get();
     }

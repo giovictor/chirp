@@ -20,6 +20,7 @@
     },
     "dependencies": {
         "moment": "^2.24.0",
-        "sweetalert": "^2.1.2"
+        "sweetalert": "^2.1.2",
+        "vue-spinner": "^1.0.3"
     }
 }

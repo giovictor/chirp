@@ -13,6 +13,7 @@ import swal from 'sweetAlert';
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
+Vue.component('ring-loader', require('vue-spinner/src/RingLoader.vue'));
 Vue.component('postfeed', require('./components/PostFeed.vue'));
 Vue.component('post', require('./components/Post.vue'));
 

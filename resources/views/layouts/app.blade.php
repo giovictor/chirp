@@ -7,7 +7,7 @@
 
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <meta name="app-url" content="{{ URL::to('/') }}">
+    <meta name="app-url" content="{{ url('/') }}">
     <link rel="icon" type="image/png" href="{{asset('images/chirp_logo.png')}}">
     <title>Chirp</title>
 
