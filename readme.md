@@ -4,7 +4,7 @@ A cooler and simplified version of Twitter made using Laravel and Vue.js with :h
 
 ## Getting Started
 
-Start CMD and cd into your chosen directory or if you have XAMPP installed much better if in htdocs folder
+Start CMD and cd into your chosen directory or much better if you have XAMPP installed and it is in the htdocs folder
 
 Clone this repository in your machine
 
@@ -24,7 +24,7 @@ Create the node_modules directory and install all NPM Packages including Vue.js
 npm install
 ```
 
-Start the server either on XAMPP htdocs folder or using
+Start the server either on XAMPP htdocs folder (localhost/[directory_name]/public) or using
 
 ```
 php artisan serve
