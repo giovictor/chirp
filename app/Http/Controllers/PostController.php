@@ -7,8 +7,8 @@ use App\Post;
 
 class PostController extends Controller
 {
-    public function index()
-    {
+    public function index($id = null)
+    {       
         return Post::with('user')->orderBy('created_at', 'desc')->get();
     }
 
@@ -18,14 +18,13 @@ class PostController extends Controller
             'post' => 'required|string|max:200',
             'user_id' => 'required|integer|exists:users,id'
         ]);
-
         $post = Post::create(['post' => $request->post, 'user_id' =>  $request->user_id]);
         return $post;
     }
 
-    public function show($id)
+    public function showPostsByUser($id)
     {
-        
+        return Post::with('user')->orderBy('created_at', 'desc')->where('user_id', $id)->get();
     }
 
     public function destroy(Post $post)

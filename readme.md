@@ -37,3 +37,16 @@ npm run dev
 //or
 npm run watch
 ```
+
+Demo Login
+
+```
+email: giorodriguez021@gmail.com
+password: secret
+````
+
+## Features
+
+1. Users can view chirps (posts) by other users on the homepage feed.
+2. Users can post chirps with a maximum character limit of 200 and can delete their own posts in the feed or in their own profile page.
+3. Users can also view other people's profile and can see their chirps.
