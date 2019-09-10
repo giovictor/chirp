@@ -54,7 +54,7 @@
                 } else if (this.posts.length==0 && this.authUser.id!=this.user.id) {
                     return `${this.user.name} have no posts yet.`
                 } else {
-                    return 'Chirps'
+                    return this.user.name
                 }
             }
         }
