@@ -38,7 +38,7 @@ npm run dev
 npm run watch
 ```
 
-Demo Login
+You can register or use my demo credentials
 
 ```
 email: giorodriguez021@gmail.com
