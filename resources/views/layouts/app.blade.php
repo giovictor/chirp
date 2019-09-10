@@ -17,7 +17,9 @@
 <body>
     <div id="app">
         @include('partials.navbar')
-        @yield('content')
+        <div class="wrapper">
+            @yield('content')
+        </div>
     </div>
 
     <!-- Scripts -->

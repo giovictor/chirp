@@ -2,13 +2,13 @@
 
 @section('content')
 <div class="container">
-    <h3 class="intro">Hello There! Welcome to Chirp. The coolest social media platform. Register to join now or login to check some new cool posts.</h3>
+    @include('partials.intro')
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-sm-6">
             <img src="{{asset('images/chirp_logo.png')}}" class="page_logo">
         </div>
 
-        <div class="col-md-6">
+        <div class="col-sm-6 login">
             <h4>Login</h4>
             <form class="form-horizontal" method="POST" action="{{ route('login') }}">
                 {{ csrf_field() }}

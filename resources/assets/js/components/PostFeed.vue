@@ -49,6 +49,7 @@
         flex-flow:column wrap;
         justify-content: center;
         align-items:center;
+        margin-top:30px;
     }
 
     .sharePost {

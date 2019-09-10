@@ -1,0 +1,1 @@
+<h3 class="intro">Hello There! Welcome to Chirp. The coolest social media platform. Register to join now or login to check some cool new posts.</h3>
