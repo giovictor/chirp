@@ -1,7 +1,7 @@
 <template>
     <div class="posts">
         <div class="sharePost" v-show="canSharePost">
-            <form class="form" @submit.prevent="sharePost">
+            <form class="form" @submit.prevent="sharePost" method="POST">
                 <div class="form-group">
                     <label>Hey wanna share something cool?</label>
                     <textarea class="postTextArea form-control" v-model="post" @keyup="decreaseCharacterLimit" ></textarea>
