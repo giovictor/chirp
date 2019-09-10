@@ -45531,7 +45531,7 @@ if (false) {
                 this.validationMessage = 'No blank post shall be posted.';
                 this.hasError = true;
             } else {
-                axios.post('api/posts', { post: this.post, user_id: this.authUser.id }).then(function (response) {
+                axios.post('api/createpost', { post: this.post, user_id: this.authUser.id }).then(function (response) {
                     return _this3.showPosts();
                 }).catch(function (error) {
                     return console.log(error);

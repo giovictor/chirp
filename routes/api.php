@@ -13,6 +13,6 @@ use Illuminate\Http\Request;
 |
 */
 Route::get('posts', 'PostController@index');
-Route::post('posts', 'PostController@store');
+Route::post('createpost', 'PostController@store');
 Route::delete('posts/{post}', 'PostController@destroy');
 Route::get('user/{id}/posts', 'PostController@showPostsByUser');
