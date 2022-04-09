@@ -19,7 +19,7 @@
         "vue": "^2.5.7"
     },
     "dependencies": {
-        "moment": "^2.24.0",
+        "moment": "^2.29.2",
         "sweetalert": "^2.1.2",
         "vue-spinner": "^1.0.3"
     }
